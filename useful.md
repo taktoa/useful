@@ -39,9 +39,10 @@ convert input.png -scale 256x320 output.jpg
 
 ## Function reference
 
-```haskell
-pkgs.writeText :: FileName -> String -> IO FilePath
-```
+| Function                                          | Return value             |
+| ------------------------------------------------- | ------------------------ |
+| `pkgs.writeText <file-name> <string>`             | Path of text file        |
+| `pkgs.fetchFromGitHub { owner repo rev sha256}`   | Path of repository       |
 
 
 [cc-by]: http://creativecommons.org/licenses/by/4.0/
