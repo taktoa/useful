@@ -1,7 +1,7 @@
 # Introduction
 
 This document contains useful information on various things in programming.
-Any time I find something thatI end up looking up multiple times, I put it
+Any time I find something that I end up looking up multiple times, I put it
 in here.
 
 Copyright © 2015 Remy Goldschmidt <taktoa@gmail.com>
