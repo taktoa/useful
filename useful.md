@@ -51,10 +51,11 @@ convert input.png -scale 256x320 output.jpg
 
 ## Function reference
 
-| Function                                          | Return value             |
-| ------------------------------------------------- | ------------------------ |
-| `pkgs.writeText <file-name> <string>`             | Path of text file        |
-| `pkgs.fetchFromGitHub { owner repo rev sha256 }`  | Path of repository       |
+| Function                                          | Return value                         |
+| ------------------------------------------------- | ------------------------------------ |
+| `pkgs.writeText <file-name> <string>`             | Path of text file                    |
+| `pkgs.fetchFromGitHub { owner repo rev sha256 }`  | Path of repository                   |
+| `lib.optionalString <boolean> <string>`           | `if <boolean> then <string> else ""` |
 
 # Haskell
 
