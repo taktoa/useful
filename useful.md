@@ -317,3 +317,18 @@ sent to that address, and never receive money again
   http://creativecommons.org/licenses/by/4.0/
 [bitcoin-example]:
   https://blockexplorer.com/block/00000000000000001e8d6829a8a21adc5d38d0a473b144b6765798e61f98bd1d
+
+--------------------------------------------------------------------------------
+
+# MLT Video Editor
+
+```console
+$ melt avformat:foo.mkv length=<L> in=<I> out=<O> -consumer avformat:bar.mp4
+```
+
+- Specify at most two of `length`, `in`, and `out`: `length` is the number of
+  frames to take, `in` is the start frame, and `out` is the end frame.
+- [This][mlt-docs] is useful for reference.
+
+[mlt-docs]:
+  http://www.mltframework.org/bin/view/MLT/MltMelt
