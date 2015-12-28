@@ -57,6 +57,343 @@ convert input.png -scale 256x320 output.jpg
 | `pkgs.fetchFromGitHub { owner repo rev sha256 }`  | Path of repository                   |
 | `lib.optionalString <boolean> <string>`           | `if <boolean> then <string> else ""` |
 
+# The `meta` attribute set
+
+## Attribute descriptions
+
+### `meta.description`
+
+#### Description
+
+A short (one-line) description of the package.
+
+This is shown by `nix-env -q --description` and also on the release pages.
+
+- Don’t include a period at the end.
+- Don’t include newline characters.
+- Capitalise the first character.
+- For brevity, don’t repeat the name of package; just describe what it does.
+
+Wrong: `libpng is a library that allows you to decode PNG images.`
+
+Right: `A library for decoding PNG images`
+
+#### Examples
+
+```nix
+meta = with stdenv.lib; {
+  # ...
+  description = "A program that produces a familiar, friendly greeting";
+  # ...
+};
+```
+
+### `meta.longDescription`
+
+#### Description
+
+An arbitrarily long description of the package.
+
+#### Examples
+
+```nix
+meta = with stdenv.lib; {
+  # ...
+  longDescription = ''
+      GNU Hello is a program that prints "Hello, world!" when you run it.
+      It is fully customizable.
+  '';
+  # ...
+};
+```
+
+### `meta.version`
+
+#### Description
+
+This specifies the package version.
+
+#### Examples
+
+```nix
+meta = with stdenv.lib; {
+  # ...
+  version = "3.0";
+  # ...
+};
+```
+
+### `meta.branch`
+
+#### Description
+
+This is used to specify that a package is not going to receive updates that are
+not in this branch.
+
+#### Examples
+
+For example, Linux kernel `3.0` is supposed to be updated to `3.0.1`, not `3.1`.
+
+This would be specified as:
+
+```nix
+meta = with stdenv.lib; {
+  # ...
+  branch = "3.0";
+  # ...
+};
+```
+
+### `meta.homepage`
+
+#### Description
+
+The package’s homepage.
+
+#### Examples
+
+```nix
+meta = with stdenv.lib; {
+  # ...
+  homepage = "http://www.gnu.org/software/hello/manual/";
+  # ...
+};
+```
+
+### `meta.downloadPage`
+
+#### Description
+
+The page where a link to the current version can be found.
+
+#### Examples
+
+```nix
+meta = with stdenv.lib; {
+  # ...
+  downloadPage = "http://ftp.gnu.org/gnu/hello/";
+  # ...
+};
+```
+
+### `meta.license`
+
+#### Description
+
+The license, or licenses, for the package. One from the attribute set defined in
+`nixpkgs/lib/licenses.nix`. At this moment using both a list of licenses and a
+single license is valid.
+
+If the license field is in the form of a list representation, then it means that
+parts of the package are licensed differently.
+
+Each license should preferably be referenced by their attribute.
+
+The non-list attribute value can also be a space delimited string representation
+of the contained attribute `shortNames` or `spdxIds`.
+
+#### Examples
+
+- Single license
+  - By attribute (preferred):
+    ```nix
+    license = licenses.gpl3;
+    ```
+  - By attribute shortName (frowned upon):
+    ```nix
+    license = "gpl3";
+    ```
+  - By attribute spdxId (frowned upon):
+    ```nix
+    license = "GPL-3.0";
+    ```
+- Multiple licenses
+  - By attribute (preferred):
+    ```nix
+    license = with licenses; [ asl20 free ofl ];
+    ```
+  - As a space-delimited string of shortNames (frowned upon):
+    ```nix
+    license = "asl20 free ofl";
+    ```
+
+For details, see [Licenses][licenses].
+
+### `meta.maintainers`
+
+#### Description
+
+A list of names and e-mail addresses of the maintainers of this Nix expression.
+
+If you would like to be a maintainer of a package, you may want to add yourself
+to `<nixpkgs>/lib/maintainers.nix`.
+
+Maintainer names should be formatted as: `[first-name] [last-name] <[email]>`,
+where `[first-name]`, `[last-name]`, and `[email]` represent the maintainer's
+first and last names and email address respectively.
+
+#### Examples
+
+Adding a maintainer to `<nixpkgs>/lib/maintainers.nix`:
+
+```nix
+/* in <nixpkgs>/lib/maintainers.nix */
+{
+  # ...
+  eelco = "Eelco Dolstra <eelco.dolstra@logicblox.com>";
+  # ...
+}
+```
+
+Specifying a single maintainer in a derivation:
+
+```nix
+meta = with stdenv.lib; {
+  # ...
+  maintainers = with maintainers; [ eelco ]; # Easy to extend
+  # ...
+};
+```
+
+Alternative way to specify a single maintainer:
+
+```nix
+meta = with stdenv.lib; {
+  # ...
+  maintainers = maintainers.eelco; # Slightly more concise
+  # ...
+};
+```
+
+Specifying multiple maintainers in a derivation:
+
+```nix
+meta = with stdenv.lib; {
+  # ...
+  maintainers = with maintainers; [ alice bob ];
+  # ...
+};
+```
+
+### `meta.platforms`
+
+#### Description
+
+The list of Nix platform types on which the package is supported. Hydra
+builds packages according to the platform specified. If no platform is
+specified, the package does not have prebuilt binaries.
+
+In `stdenv.lib.platforms`, defined in `<nixpkgs>/lib/platforms.nix`, one can
+find various common lists of platforms types.
+
+#### Examples
+
+For a package supported on Linux:
+
+```nix
+meta = with stdenv.lib; {
+  # ...
+  platforms = platforms.linux;
+  # ...
+};
+```
+
+For a package supported on all available platforms:
+
+```nix
+meta = with stdenv.lib; {
+  # ...
+  platforms = platforms.all;
+  # ...
+};
+```
+
+#### Common values
+
+For this table, the attribute set `platforms` refers to `stdenv.lib.platforms`.
+
+| Expression                | Description                                    |
+| ------------------------- | ---------------------------------------------- |
+| **General**               |                                                |
+| `platforms.all`           | All available platforms.                       |
+| `platforms.none`          | The empty set of platforms.                    |
+| **Platform generators**   |                                                |
+| `platforms.allBut [foo]`  | All platforms except for `[foo]`.              |
+| **Combinations**          |                                                |
+| `platforms.gnu`           | Platforms created by/for the GNU project.      |
+| `platforms.unix`          | Platforms with some POSIX compliance.          |
+| `platforms.mesaPlatforms` | Platforms supporting the Mesa 3D library.      |
+| **Operating Systems**     |                                                |
+| `platforms.linux`         | Operating systems based on the Linux kernel.   |
+| `platforms.darwin`        | Darwin and Mac OS X.                           |
+| `platforms.freebsd`       | The FreeBSD operating system.                  |
+| `platforms.openbsd`       | The OpenBSD operating system.                  |
+| `platforms.netbsd`        | The NetBSD operating system.                   |
+| `platforms.cygwin`        | The Cygwin Unix emulation layer for Windows.   |
+| `platforms.illumos`       | Operating systems based on the Illumos kernel. |
+| **Architectures**         |                                                |
+| `platforms.x86_64`        | The AMD64 microarchitecture.                   |
+| `platforms.i686`          | The Intel 32-bit microarchitecture.            |
+| `platforms.arm`           | Any version of the ARM microarchitecture.      |
+| `platforms.mips`          | The MIPS64 microarchitecture.                  |
+
+### `meta.hydraPlatforms`
+
+#### Description
+
+The list of Nix platform types for which the Hydra (Nix's continuous build
+system) instance at <hydra.nixos.org> will build the package.
+
+The default value for `hydraPlatforms` is that of `platforms`.
+
+Thus, the only reason to set `meta.hydraPlatforms` is if you want
+http://hydra.nixos.org to build the package on a subset of `meta.platforms`,
+or not at all.
+
+#### Examples
+
+To prevent Hydra builds for a particular package:
+
+```nix
+meta = with stdenv.lib; {
+  # ...
+  hydraPlatforms = []; # Don't build on Hydra
+  # ...
+};
+```
+
+To only allow Linux builds on Hydra:
+
+```nix
+meta = with stdenv.lib; {
+  # ...
+  hydraPlatforms = stdenv.lib.platforms.linux; # On Hydra, only build Linux
+  # ...
+};
+```
+
+### `meta.broken`
+
+If set to true, the package is marked as "broken", meaning that it won’t show up
+in `nix-env -qa`, and cannot be built or installed.
+
+Such packages should be removed from Nixpkgs eventually unless they are fixed.
+
+### `meta.updateWalker`
+
+If set to true, the package is tested to be updated correctly by the
+`update-walker.sh` script without additional settings.
+
+Such packages have `meta.version` set and their homepage (or the page
+specified by `meta.downloadPage`) contains a direct link to the package
+tarball.
+
+## Derivation template
+
+``` nix
+/* FIXME: add a template for meta-attributes in derivations. */
+```
+
 # Haskell
 
 ## GHC Extensions
