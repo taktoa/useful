@@ -9,6 +9,12 @@ Copyright © 2015 Remy Goldschmidt <taktoa@gmail.com>
 This work is licensed under the
 [Creative Commons Attribution 4.0 International License][cc-by].
 
+[generate-toc-pragma]: IGNORE_BEGIN
+# Table of Contents
+[generate-toc-pragma]: IGNORE_END
+
+[generate-toc-pragma]: ADD_TOC
+
 # Shell
 
 ## Bash syntax
@@ -57,13 +63,13 @@ convert input.png -scale 256x320 output.jpg
 | `pkgs.fetchFromGitHub { owner repo rev sha256 }`  | Path of repository                   |
 | `lib.optionalString <boolean> <string>`           | `if <boolean> then <string> else ""` |
 
-# The `meta` attribute set
+## The `meta` attribute set
 
-## Attribute descriptions
+### Attribute descriptions
 
-### `meta.description`
+#### `meta.description`
 
-#### Description
+##### Description
 
 A short (one-line) description of the package.
 
@@ -78,107 +84,107 @@ Wrong: `libpng is a library that allows you to decode PNG images.`
 
 Right: `A library for decoding PNG images`
 
-#### Examples
+##### Examples
 
 ```nix
-meta = with stdenv.lib; {
-  # ...
-  description = "A program that produces a familiar, friendly greeting";
-  # ...
-};
+{ # ...
+  meta = with stdenv.lib; {
+    description = "A program that produces a familiar, friendly greeting";
+  };
+}
 ```
 
-### `meta.longDescription`
+#### `meta.longDescription`
 
-#### Description
+##### Description
 
 An arbitrarily long description of the package.
 
-#### Examples
+##### Examples
 
 ```nix
-meta = with stdenv.lib; {
-  # ...
-  longDescription = ''
-      GNU Hello is a program that prints "Hello, world!" when you run it.
-      It is fully customizable.
-  '';
-  # ...
-};
+{ # ...
+  meta = with stdenv.lib; {
+    longDescription = ''
+        GNU Hello is a program that prints "Hello, world!" when you run it.
+        It is fully customizable.
+    '';
+  };
+}
 ```
 
-### `meta.version`
+#### `meta.version`
 
-#### Description
+##### Description
 
 This specifies the package version.
 
-#### Examples
+##### Examples
 
 ```nix
-meta = with stdenv.lib; {
-  # ...
-  version = "3.0";
-  # ...
-};
+{ # ...
+  meta = with stdenv.lib; {
+    version = "3.0";
+  };
+}
 ```
 
-### `meta.branch`
+#### `meta.branch`
 
-#### Description
+##### Description
 
 This is used to specify that a package is not going to receive updates that are
 not in this branch.
 
-#### Examples
+##### Examples
 
 For example, Linux kernel `3.0` is supposed to be updated to `3.0.1`, not `3.1`.
 
 This would be specified as:
 
 ```nix
-meta = with stdenv.lib; {
-  # ...
-  branch = "3.0";
-  # ...
-};
+{ # ...
+  meta = with stdenv.lib; {
+    branch = "3.0";
+  };
+}
 ```
 
-### `meta.homepage`
+#### `meta.homepage`
 
-#### Description
+##### Description
 
 The package’s homepage.
 
-#### Examples
+##### Examples
 
 ```nix
-meta = with stdenv.lib; {
-  # ...
-  homepage = "http://www.gnu.org/software/hello/manual/";
-  # ...
-};
+{ # ...
+  meta = with stdenv.lib; {
+    homepage = "http://www.gnu.org/software/hello/manual/";
+  };
+}
 ```
 
-### `meta.downloadPage`
+#### `meta.downloadPage`
 
-#### Description
+##### Description
 
 The page where a link to the current version can be found.
 
-#### Examples
+##### Examples
 
 ```nix
-meta = with stdenv.lib; {
-  # ...
-  downloadPage = "http://ftp.gnu.org/gnu/hello/";
-  # ...
-};
+{ # ...
+  meta = with stdenv.lib; {
+    downloadPage = "http://ftp.gnu.org/gnu/hello/";
+  };
+}
 ```
 
-### `meta.license`
+#### `meta.license`
 
-#### Description
+##### Description
 
 The license, or licenses, for the package. One from the attribute set defined in
 `nixpkgs/lib/licenses.nix`. At this moment using both a list of licenses and a
@@ -192,36 +198,57 @@ Each license should preferably be referenced by their attribute.
 The non-list attribute value can also be a space delimited string representation
 of the contained attribute `shortNames` or `spdxIds`.
 
-#### Examples
+##### Examples
 
-- Single license
-  - By attribute (preferred):
-    ```nix
+Preferred convention for a single license:
+
+```nix
+{ # ...
+  meta = with stdenv.lib; {
+    # The license attribute
     license = licenses.gpl3;
-    ```
-  - By attribute shortName (frowned upon):
-    ```nix
+  };
+}
+```
+
+Alternative (frowned upon) conventions for a single license:
+
+```nix
+{ # ...
+  meta = with stdenv.lib; {
+    # The license shortName
     license = "gpl3";
-    ```
-  - By attribute spdxId (frowned upon):
-    ```nix
+    # The license spdxId
     license = "GPL-3.0";
-    ```
-- Multiple licenses
-  - By attribute (preferred):
-    ```nix
+  };
+}
+```
+
+Preferred convention for multiple licenses:
+
+```nix
+{ # ...
+  meta = with stdenv.lib; {
+    # A list of license attributes
     license = with licenses; [ asl20 free ofl ];
-    ```
-  - As a space-delimited string of shortNames (frowned upon):
-    ```nix
+  };
+}
+```
+
+Alternative (frowned upon) conventions for a multiple licenses:
+
+```nix
+{ # ...
+  meta = with stdenv.lib; {
+    # A space-delimited string of shortNames
     license = "asl20 free ofl";
-    ```
+  };
+}
+```
 
-For details, see [Licenses][licenses].
+#### `meta.maintainers`
 
-### `meta.maintainers`
-
-#### Description
+##### Description
 
 A list of names and e-mail addresses of the maintainers of this Nix expression.
 
@@ -232,14 +259,13 @@ Maintainer names should be formatted as: `[first-name] [last-name] <[email]>`,
 where `[first-name]`, `[last-name]`, and `[email]` represent the maintainer's
 first and last names and email address respectively.
 
-#### Examples
+##### Examples
 
 Adding a maintainer to `<nixpkgs>/lib/maintainers.nix`:
 
 ```nix
 /* in <nixpkgs>/lib/maintainers.nix */
-{
-  # ...
+{ # ...
   eelco = "Eelco Dolstra <eelco.dolstra@logicblox.com>";
   # ...
 }
@@ -248,67 +274,69 @@ Adding a maintainer to `<nixpkgs>/lib/maintainers.nix`:
 Specifying a single maintainer in a derivation:
 
 ```nix
-meta = with stdenv.lib; {
-  # ...
-  maintainers = with maintainers; [ eelco ]; # Easy to extend
-  # ...
-};
+{ # ...
+  meta = with stdenv.lib; {
+    # This way is easy to extend to multiple maintainers
+    maintainers = with maintainers; [ eelco ];
+  };
+}
 ```
 
 Alternative way to specify a single maintainer:
 
 ```nix
-meta = with stdenv.lib; {
-  # ...
-  maintainers = maintainers.eelco; # Slightly more concise
-  # ...
-};
+{ # ...
+  meta = with stdenv.lib; {
+    # This way is slightly more concise
+    maintainers = maintainers.eelco;
+  };
+}
 ```
 
 Specifying multiple maintainers in a derivation:
 
 ```nix
-meta = with stdenv.lib; {
-  # ...
-  maintainers = with maintainers; [ alice bob ];
-  # ...
-};
+{ # ...
+  meta = with stdenv.lib; {
+    maintainers = with maintainers; [ alice bob ];
+  };
+}
 ```
 
-### `meta.platforms`
+#### `meta.platforms`
 
-#### Description
+##### Description
 
-The list of Nix platform types on which the package is supported. Hydra
-builds packages according to the platform specified. If no platform is
-specified, the package does not have prebuilt binaries.
+The list of Nix platform types on which the package is supported. Hydra builds
+packages according to the platform specified. If no platform is specified, the
+package does not have prebuilt binaries.
 
 In `stdenv.lib.platforms`, defined in `<nixpkgs>/lib/platforms.nix`, one can
 find various common lists of platforms types.
 
-#### Examples
+##### Examples
 
 For a package supported on Linux:
 
 ```nix
-meta = with stdenv.lib; {
-  # ...
-  platforms = platforms.linux;
-  # ...
-};
+{ # ...
+  meta = with stdenv.lib; {
+    platforms = platforms.linux;
+  };
+}
 ```
 
 For a package supported on all available platforms:
 
 ```nix
-meta = with stdenv.lib; {
-  # ...
-  platforms = platforms.all;
-  # ...
-};
+{ # ...
+  meta = with stdenv.lib; {
+    platforms = platforms.all;
+  };
+}
 ```
 
-#### Common values
+##### Common values
 
 For this table, the attribute set `platforms` refers to `stdenv.lib.platforms`.
 
@@ -337,9 +365,9 @@ For this table, the attribute set `platforms` refers to `stdenv.lib.platforms`.
 | `platforms.arm`           | Any version of the ARM microarchitecture.      |
 | `platforms.mips`          | The MIPS64 microarchitecture.                  |
 
-### `meta.hydraPlatforms`
+#### `meta.hydraPlatforms`
 
-#### Description
+##### Description
 
 The list of Nix platform types for which the Hydra (Nix's continuous build
 system) instance at <hydra.nixos.org> will build the package.
@@ -350,36 +378,36 @@ Thus, the only reason to set `meta.hydraPlatforms` is if you want
 http://hydra.nixos.org to build the package on a subset of `meta.platforms`,
 or not at all.
 
-#### Examples
+##### Examples
 
 To prevent Hydra builds for a particular package:
 
 ```nix
-meta = with stdenv.lib; {
-  # ...
-  hydraPlatforms = []; # Don't build on Hydra
-  # ...
-};
+{ # ...
+  meta = with stdenv.lib; {
+    hydraPlatforms = []; # Don't build on Hydra
+  };
+}
 ```
 
 To only allow Linux builds on Hydra:
 
 ```nix
-meta = with stdenv.lib; {
-  # ...
-  hydraPlatforms = stdenv.lib.platforms.linux; # On Hydra, only build Linux
-  # ...
-};
+{ # ...
+  meta = with stdenv.lib; {
+    hydraPlatforms = stdenv.lib.platforms.linux; # On Hydra, only build Linux
+  };
+}
 ```
 
-### `meta.broken`
+#### `meta.broken`
 
 If set to true, the package is marked as "broken", meaning that it won’t show up
 in `nix-env -qa`, and cannot be built or installed.
 
 Such packages should be removed from Nixpkgs eventually unless they are fixed.
 
-### `meta.updateWalker`
+#### `meta.updateWalker`
 
 If set to true, the package is tested to be updated correctly by the
 `update-walker.sh` script without additional settings.
@@ -388,10 +416,36 @@ Such packages have `meta.version` set and their homepage (or the page
 specified by `meta.downloadPage`) contains a direct link to the package
 tarball.
 
-## Derivation template
+### Derivation template
 
-``` nix
-/* FIXME: add a template for meta-attributes in derivations. */
+```nix
+{ stdenv, fetchurl }:
+
+stdenv.mkDerivation rec {
+  name = "hello-${version}";
+  version = "2.10";
+
+  src = fetchurl {
+    url = "mirror://gnu/hello/${name}.tar.gz";
+    sha256 = "0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i";
+  };
+
+  buildInputs = [ /* Dependencies go here. */ ];
+
+  meta = with stdenv.lib; {
+    inherit version;
+    homepage = "http://www.gnu.org/software/hello/manual/";
+    downloadPage = "http://ftp.gnu.org/gnu/hello/";
+    description = "A program that produces a familiar, friendly greeting";
+    longDescription = ''
+        GNU Hello is a program that prints "Hello, world!" when you run it.
+        It is fully customizable.
+    '';
+    license = with licenses; [ gpl3 ];
+    maintainers = with maintainers; [ taktoa ];
+    platforms = platforms.all;
+  }
+}
 ```
 
 # Haskell
@@ -484,7 +538,7 @@ tarball.
 
 The following is edited from a conversation between myself and a friend.
 
-The block chain self-adjusts the difficulty of finding a block, to ensure that 
+The block chain self-adjusts the difficulty of finding a block, to ensure that
 the global hashing power finds a block every twenty minutes on average.
 
 If, for example, all of North America (heretofore referred to as `NA`) was
@@ -608,7 +662,7 @@ makes it twice as hard to mine a block.
 
 ## Altcoins
 
-About the only difference between Bitcoin, and the various altcoins, is the 
+About the only difference between Bitcoin, and the various altcoins, is the
 hashing algorithm used.
 
 Some of them use scrypt, which requires a relatively high amount of memory,
@@ -669,3 +723,17 @@ $ melt avformat:foo.mkv length=<L> in=<I> out=<O> -consumer avformat:bar.mp4
 
 [mlt-docs]:
   http://www.mltframework.org/bin/view/MLT/MltMelt
+
+# Emacs
+
+## Org-mode
+
+### Commonly used keybindings
+
+- TODO-related
+  - `C-c C-t` --- `org-todo` --- cycle through TODO states
+  - `C-c a t` --- `org-todo-list` --- show the global TODO list
+  - Scheduling
+    - `C-c C-d` --- `org-deadline` --- insert a DEADLINE keyword
+    - `C-c C-s` --- `org-schedule` --- insert a SCHEDULED keyword
+    - `C-c / d` --- `org-check-deadlines` --- check deadlines
