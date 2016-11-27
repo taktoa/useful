@@ -737,3 +737,31 @@ $ melt avformat:foo.mkv length=<L> in=<I> out=<O> -consumer avformat:bar.mp4
     - `C-c C-d` --- `org-deadline` --- insert a DEADLINE keyword
     - `C-c C-s` --- `org-schedule` --- insert a SCHEDULED keyword
     - `C-c / d` --- `org-check-deadlines` --- check deadlines
+
+# SSH
+
+## Setting up an SSH reverse tunnel
+
+Suppose you have two people, Alice and Eve. Alice is a newbie, and has a
+computer in a network with no port forwarding, but wants to install Linux or fix
+some issue. Eve is an expert, but would very much prefer to run commands in a
+shell than to describe them over the phone to Alice. Getting Alice to set up
+port forwarding will take longer than describing the necessary commands.
+
+Setting up a VPN would work, but often this is impractical or impossible.
+Setting up [toxvpn][] is doable on many systems, but currently Tox has a bug in
+which the number of UDP connections it opens will crash some routers.
+Is there any other solution? Enter SSH reverse tunnelling.
+
+Suppose that Eve can SSH into a server at `foobar.net` that is on a network with
+port 22 (or some other port `<n>`) open. Suppose that Alice is on a laptop with
+username `alice`. Suppose that the server at `foobar.net` has two users, `eve`
+and `alice`, and that `alice` has an SSH public key in its `authorized_keys`
+that is currently on Alice's laptop. Suppose that Alice's laptop has an SSH
+public key in its `authorized_keys` that is currently on the `eve` account on
+`foobar.net`. Then follow these steps:
+
+1. Run `ssh alice@foobar.net -R 2222:127.0.0.1:22` on Alice's laptop as `alice`
+2. Run `ssh alice@localhost -p 2222` on Eve's server as `eve`
+
+[toxvpn]: https://github.com/cleverca22/toxvpn
