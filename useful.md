@@ -765,3 +765,60 @@ public key in its `authorized_keys` that is currently on the `eve` account on
 2. Run `ssh alice@localhost -p 2222` on Eve's server as `eve`
 
 [toxvpn]: https://github.com/cleverca22/toxvpn
+
+# PDF, PS, and DJVU
+
+## PDF
+
+- `mutool` (from `mupdf`)
+  - Split each page in a PDF in half horizontally:
+    - `mutool poster -x 2 <input-pdf> <output-pdf>`
+  - Split each page in a PDF in half vertically:
+    - `mutool poster -y 2 <input-pdf> <output-pdf>`
+  - Clean up PDF syntax (usually decreases size a little):
+    - `mutool clean -ggg -z <input-pdf> <output-pdf>`
+- `pdftk` (from `pdftk`)
+  -
+
+## PS
+
+FIXME
+
+## DJVU
+
+FIXME
+
+# C++
+
+## Qt
+
+### Qt MetaObjects and Introspection
+
+#### Listing all previously instantiated classes
+
+```c++
+#include <map>
+#include <string>
+
+#include <QDebug>
+#include <QMetaType>
+#include <QMetaObject>
+
+std::map<std::string, const QMetaObject*> getAllInstantiatedClasses() {
+    std::map<int, std::string> types;
+    const char* type_name = nullptr;
+    for(int i = 0; i < QMetaType::User; i++) {
+        type_name = QMetaType::typeName(i);
+        if(type_name) { types[id] = { type_name }; }
+    }
+    while(int i = QMetaType::User; (type_name = QMetaType::typeName(i)); i++) {
+        types[i] = { type_name }; i++;
+    }
+    std::map<std::string, const QMetaObject*> result;
+    for(const auto& pair : types) {
+        const QMetaObject* qmop = QMetaType::metaObjectForType(pair.first);
+        if(qmop) { result[pair.second] = qmop; }
+    }
+    return result;
+}
+```
