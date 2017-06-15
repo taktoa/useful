@@ -453,11 +453,17 @@ stdenv.mkDerivation rec {
 ## GHC Extensions
 
 ```haskell
+{-# LANGUAGE AllowAmbiguousTypes        #-}
+{-# LANGUAGE AlternativeLayoutRule      #-}
+{-# LANGUAGE ApplicativeDo              #-}
 {-# LANGUAGE Arrows                     #-}
 {-# LANGUAGE AutoDeriveTypeable         #-}
+{-# LANGUAGE BangPatterns               #-}
 {-# LANGUAGE BinaryLiterals             #-}
+{-# LANGUAGE CApiFFI                    #-}
 {-# LANGUAGE ConstrainedClassMethods    #-}
 {-# LANGUAGE ConstraintKinds            #-}
+{-# LANGUAGE CPP                        #-}
 {-# LANGUAGE DataKinds                  #-}
 {-# LANGUAGE DatatypeContexts           #-}
 {-# LANGUAGE DefaultSignatures          #-}
@@ -466,10 +472,12 @@ stdenv.mkDerivation rec {
 {-# LANGUAGE DeriveFoldable             #-}
 {-# LANGUAGE DeriveFunctor              #-}
 {-# LANGUAGE DeriveGeneric              #-}
+{-# LANGUAGE DeriveLift                 #-}
 {-# LANGUAGE DeriveTraversable          #-}
 {-# LANGUAGE DisambiguateRecordFields   #-}
 {-# LANGUAGE DoAndIfThenElse            #-}
 {-# LANGUAGE DoRec                      #-}
+{-# LANGUAGE DuplicateRecordFields      #-}
 {-# LANGUAGE EmptyCase                  #-}
 {-# LANGUAGE EmptyDataDecls             #-}
 {-# LANGUAGE ExistentialQuantification  #-}
@@ -478,33 +486,46 @@ stdenv.mkDerivation rec {
 {-# LANGUAGE ExtendedDefaultRules       #-}
 {-# LANGUAGE FlexibleContexts           #-}
 {-# LANGUAGE FlexibleInstances          #-}
+{-# LANGUAGE ForeignFunctionInterface   #-}
 {-# LANGUAGE FunctionalDependencies     #-}
-{-# LANGUAGE GADTSyntax                 #-}
 {-# LANGUAGE GADTs                      #-}
+{-# LANGUAGE GADTSyntax                 #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE Generics                   #-}
+{-# LANGUAGE GHCForeignImportPrim       #-}
+{-# LANGUAGE Haskell2010                #-}
+{-# LANGUAGE Haskell98                  #-}
 {-# LANGUAGE ImplicitParams             #-}
 {-# LANGUAGE ImplicitPrelude            #-}
 {-# LANGUAGE ImpredicativeTypes         #-}
 {-# LANGUAGE IncoherentInstances        #-}
 {-# LANGUAGE InstanceSigs               #-}
+{-# LANGUAGE InterruptibleFFI           #-}
+{-# LANGUAGE JavaScriptFFI              #-}
 {-# LANGUAGE KindSignatures             #-}
 {-# LANGUAGE LambdaCase                 #-}
 {-# LANGUAGE LiberalTypeSynonyms        #-}
 {-# LANGUAGE MagicHash                  #-}
 {-# LANGUAGE MonadComprehensions        #-}
+{-# LANGUAGE MonadFailDesugaring        #-}
 {-# LANGUAGE MonoLocalBinds             #-}
+{-# LANGUAGE MonomorphismRestriction    #-}
 {-# LANGUAGE MonoPatBinds               #-}
 {-# LANGUAGE MultiParamTypeClasses      #-}
 {-# LANGUAGE MultiWayIf                 #-}
-{-# LANGUAGE NPlusKPatterns             #-}
 {-# LANGUAGE NamedFieldPuns             #-}
 {-# LANGUAGE NamedWildCards             #-}
 {-# LANGUAGE NegativeLiterals           #-}
+{-# LANGUAGE NPlusKPatterns             #-}
 {-# LANGUAGE NullaryTypeClasses         #-}
 {-# LANGUAGE NumDecimals                #-}
 {-# LANGUAGE OverlappingInstances       #-}
+{-# LANGUAGE OverloadedLabels           #-}
 {-# LANGUAGE OverloadedLists            #-}
+{-# LANGUAGE OverloadedStrings          #-}
 {-# LANGUAGE PackageImports             #-}
+{-# LANGUAGE ParallelArrays             #-}
+{-# LANGUAGE ParallelListComp           #-}
 {-# LANGUAGE PartialTypeSignatures      #-}
 {-# LANGUAGE PatternGuards              #-}
 {-# LANGUAGE PatternSignatures          #-}
@@ -512,27 +533,197 @@ stdenv.mkDerivation rec {
 {-# LANGUAGE PolyKinds                  #-}
 {-# LANGUAGE PolymorphicComponents      #-}
 {-# LANGUAGE PostfixOperators           #-}
+{-# LANGUAGE QuasiQuotes                #-}
 {-# LANGUAGE Rank2Types                 #-}
 {-# LANGUAGE RankNTypes                 #-}
 {-# LANGUAGE RebindableSyntax           #-}
 {-# LANGUAGE RecordPuns                 #-}
 {-# LANGUAGE RecordWildCards            #-}
 {-# LANGUAGE RecursiveDo                #-}
+{-# LANGUAGE RelaxedLayout              #-}
+{-# LANGUAGE RelaxedPolyRec             #-}
 {-# LANGUAGE RoleAnnotations            #-}
+{-# LANGUAGE Safe                       #-}
 {-# LANGUAGE ScopedTypeVariables        #-}
 {-# LANGUAGE StandaloneDeriving         #-}
 {-# LANGUAGE StaticPointers             #-}
+{-# LANGUAGE Strict                     #-}
+{-# LANGUAGE StrictData                 #-}
+{-# LANGUAGE TemplateHaskell            #-}
+{-# LANGUAGE TemplateHaskellQuotes      #-}
 {-# LANGUAGE TraditionalRecordSyntax    #-}
 {-# LANGUAGE TransformListComp          #-}
 {-# LANGUAGE Trustworthy                #-}
 {-# LANGUAGE TupleSections              #-}
+{-# LANGUAGE TypeApplications           #-}
 {-# LANGUAGE TypeFamilies               #-}
+{-# LANGUAGE TypeFamilyDependencies     #-}
+{-# LANGUAGE TypeInType                 #-}
 {-# LANGUAGE TypeOperators              #-}
 {-# LANGUAGE TypeSynonymInstances       #-}
 {-# LANGUAGE UnboxedTuples              #-}
 {-# LANGUAGE UndecidableInstances       #-}
+{-# LANGUAGE UndecidableSuperClasses    #-}
 {-# LANGUAGE UnicodeSyntax              #-}
+{-# LANGUAGE UnliftedFFITypes           #-}
+{-# LANGUAGE Unsafe                     #-}
+{-# LANGUAGE ViewPatterns               #-}
 ```
+
+## Haddock
+
+### Code Sections
+
+```
+-- * Section
+-- ** Sub-section
+-- *** Sub-sub-section
+```
+
+### Named Documentation Chunks
+
+```
+-- $name
+[… other stuff …]
+-- $name
+-- Here is the documentation text
+-- which is embedded elsewhere
+```
+
+### Code Blocks
+
+#### Internally marked-up code block
+
+```
+-- @
+--   fact n = product [1..n]
+-- @
+```
+
+#### Literal blocks
+
+```
+-- > fact n = product [1..n]
+```
+
+#### REPL Examples
+
+```
+-- >>> fact 5
+-- 120
+```
+
+#### Properties
+
+```
+-- prop> a + b = b + a
+```
+
+### Hyperlinked Identifiers
+
+```
+-- The value 'x' of type 'T'
+-- The out-of-scope 'MyModule.x'
+-- The "MyModule" module
+```
+
+### Textual Markup
+
+```
+-- Emphasis: /forward slashes/.
+-- Bolding: __underscores__.
+-- Monospaced text: @ampersands@.
+```
+
+### Links and Images
+
+```
+-- A raw link: <http://example.com>.
+-- A named <http://example.com link>.
+-- Another style of [named link](http://example.com).
+-- An embedded image: ![description](imagepath.png).
+```
+
+### Lists
+
+#### Bullet lists
+
+##### Style 1:
+
+```
+-- * first item
+-- * second item
+```
+
+##### Style 2:
+
+```
+-- - first item
+-- - second item
+```
+
+#### Numbered lists
+
+##### Style 1:
+
+```
+-- 1. first item
+-- 2. second item
+```
+
+##### Style 2:
+
+```
+-- (1) first item
+-- (2) second item
+```
+
+#### Definition lists
+
+```
+-- [one] first item
+-- [two] second item
+```
+
+### Mathematics/LaTeX
+
+```
+-- \[
+--   f(n) = \Sum_{i=1}^{n} i
+-- \]
+```
+
+### Headings in Documentation
+
+```
+-- = Heading
+-- == Sub-heading
+-- === Sub-sub-heading
+```
+
+### Metadata
+
+#### `@since` annotations
+
+These are intended to signal what the first version of the package that included
+the relevant API feature was:
+
+```
+-- @since 1.2.3
+```
+
+### Module Attributes
+
+- `{-# OPTIONS_HADDOCK hide #-}`
+  - Omit this module from the docs.
+- `{-# OPTIONS_HADDOCK prune #-}`
+  - Omit definitions without docs.
+- `{-# OPTIONS_HADDOCK ignore-exports #-}`
+  - Treat this module as though all top-level items are exported.
+- `{-# OPTIONS_HADDOCK not-home #-}`
+  - Do not treat this module as the "home" of identifiers it exports.
+- `{-# OPTIONS_HADDOCK show-extensions #-}`
+  - Show all enabled `{-# LANGUAGE … #-}` pragmas.
 
 # Bitcoin
 
